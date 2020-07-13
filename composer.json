@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "GIE-WEB-SERVICE",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "For management external services for each app.",
     "keywords": [
         "framework",
         "laravel"
