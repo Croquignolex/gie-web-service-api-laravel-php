@@ -26,3 +26,5 @@ Route::get('/test', function () {
     ]);
 });
 
+Route::post('/send_mail', 'EmailServiceController');
+
