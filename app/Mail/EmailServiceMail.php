@@ -5,14 +5,14 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+//use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailServiceMail extends Mailable implements ShouldQueue
+class EmailServiceMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $from;
     public $text;
     public $html;
+    public $source;
     public $attach;
     public $subject;
 
@@ -27,9 +27,9 @@ class EmailServiceMail extends Mailable implements ShouldQueue
      */
     public function __construct($from, $text, $html, $attach, $subject)
     {
-        $this->from = $from;
         $this->text = $text;
         $this->html = $html;
+        $this->source = $from;
         $this->attach = $attach;
         $this->subject = $subject;
     }
@@ -42,23 +42,21 @@ class EmailServiceMail extends Mailable implements ShouldQueue
     public function build()
     {
         // Data
-        $mail = $this;
-        $from = $this->from;
+        $source = $this->source;
         $attach = $this->attach;
 
         // Mail sender
-        $mail = is_null($from) ? $mail : $mail->from($from);
+        if(!is_null($source)) $this->from($source);
 
         // Mail subject and views
-        $mail = $mail
-            ->subject($this->subject)
+        $this->subject($this->subject)
             ->view('mail.service.normal')
             ->text('mail.service.plain');
 
         // Mail attach
-        $mail = is_null($attach) ? $mail : $mail->attach($attach);
+        if(!is_null($attach)) $this->attach($attach);
 
         // Return
-        return $mail;
+        return $this;
     }
 }
